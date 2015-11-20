@@ -21,26 +21,53 @@
  // ];
 
  var samples = [
-	54,
-	51,
-	58,
-	46,
-	54,
-	55,
-	53,
-	48,
-	50,
-	49,
-	48,
-	55,
-	56,
-	50,
-	53,
-	53
+ 	[1, 2],
+ 	[3, 4],
+ 	[5, 6],
+ 	[7, 8]	
  ];
 
-var result = getCombination(samples, 2);
+var sampleCnt  = samples.length; // サンプル数
+var elementCnt = samples[0].length; // 要素数
 
+data = [];
+
+ var samplesCnt = samples.length;
+ for (var i = 0; i < samplesCnt; i++) {
+ 	data[i] = new Array();
+ 	for (var j = i + 1; j < samplesCnt; j++) {
+ 		data[i][j] = getDistance(i, j, elementCnt, samples);
+ 	}
+ }
+
+ console.log(data);
+
+/*-----------------------------------
+ * 2つのデータ間の距離を取得する関数
+ * @params
+ * sampleNum  : サンプル番号
+ * nextSampleNum : 次のサンプル番号
+ * elementCnt : 要素数
+ * data       : データ
+
+ * @return
+ * distance   : 距離
+ *---------------------------------*/
+function getDistance(sampleNum, nextSampleNum, elementCnt, data) {
+
+	var distance = 0;
+	var sum = 0;
+
+	// 要素の数だけ繰り返す
+	for (var i= 0; i < elementCnt; i++) {
+		sum += Math.pow(data[sampleNum][i] - data[nextSampleNum][i], 2);
+	}
+	distance = Math.sqrt(sum);
+
+	return distance;
+}
+
+// var result = getCombination(samples, 2);
 /**
  * 組み合わせを求める関数
  *
@@ -74,4 +101,3 @@ function getCombination(samples, extCnt){
 
 	return comb;
 }
-

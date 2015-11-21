@@ -32,27 +32,25 @@ var elementCnt = samples[0].length; // 要素数
 
 data = [];
 
- var samplesCnt = samples.length;
- for (var i = 0; i < samplesCnt; i++) {
- 	data[i] = new Array();
- 	for (var j = i + 1; j < samplesCnt; j++) {
- 		data[i][j] = getDistance(i, j, elementCnt, samples);
- 	}
- }
+var samplesCnt = samples.length;
+for (var i = 0; i < samplesCnt; i++) {
+	data[i] = new Array();
+	for (var j = i + 1; j < samplesCnt; j++) {
+		data[i][j] = getDistance(i, j, elementCnt, samples);
+	}
+}
 
  console.log(data);
 
-/*-----------------------------------
+/*---------------------------------------------------------------
  * 2つのデータ間の距離を取得する関数
- * @params
- * sampleNum  : サンプル番号
- * nextSampleNum : 次のサンプル番号
- * elementCnt : 要素数
- * data       : データ
-
- * @return
- * distance   : 距離
- *---------------------------------*/
+ * @param sampleNum     int   サンプル番号
+ * @param nextSampleNum int   次のサンプル番号
+ * @param elementCnt    int   次のサンプル番号
+ * @param data          array データ
+ *
+ * @return distance int ２つのデータ間の
+ *------------------------------------------------------------*/
 function getDistance(sampleNum, nextSampleNum, elementCnt, data) {
 
 	var distance = 0;

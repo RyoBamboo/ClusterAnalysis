@@ -12,7 +12,7 @@
  //	[159, 48],
  //	[165, 50],
  //	[165, 49],
- //	[162, 48]
+ //	[162, 48],
  //	[168, 55],
  //	[166, 56],
  //	[163, 50],
@@ -21,17 +21,10 @@
  // ];
 
  var samples = [
- 	// [1, 2],
- 	// [3, 4],
- 	// [5, 6],
- 	// [7, 8]	
- 	[165, 49],
- 	[162, 48],
- 	[168, 55],
- 	[166, 56],
- 	[163, 50],
- 	[164, 53],
- 	[166, 53]
+ 	[1, 2],
+ 	[3, 4],
+ 	[5, 6],
+ 	[7, 8]	
  ];
 
  var result = {};
@@ -54,7 +47,6 @@ for (var i = 0; i < sampleCnt; i++) {
 	data[i] = new Array();
 	for (var j = i + 1; j < sampleCnt; j++) {
 		data[i][j] = getDistanceOfData(i, j, elementCnt, samples);
-		console.log(data[i][j]);
 	}
 }
 
@@ -79,29 +71,25 @@ for (var i = 0; i < sampleCnt; i++) {
 	}
 }
 
-// 最小距離の数値を持つクラスターのインデックスを集める
-var minNum = [];
+// クラスターを融合して他のクラスターとの距離を算出する
 for (var i = 0; i < sampleCnt; i++) {
 	for (var j = i + 1; j < sampleCnt; j++) {
-		if (min == data[i][j]) {
-			minNum.push([i, j]);
+		if (i !=cj && j != cj) {
+			if (i == ci) {
+				data[i][j] = getDistanceOfCluster(method, data[ci][j], data[cj][j], 0, 0, 0, 0);
+				data[j][i] = data[i][j];
+			}
 		}
 	}
 }
 
-var ci;
-var cj;
-for (var key in minNum) {
-	ci = minNum[key][0];
-	cj = minNum[key][1];
-	for (var i = 0; i < sampleCnt; i++) {
-		for (var j = i + 1; j < sampleCnt; j++) {
-
-		}
+// 各クラスターのサンプル数とサンプル番号を更新する
+clusterSampleCnt[ci] += clusterSampleCnt[cj];
+for (var i = 0; i < sampleCnt; i++) {
+	if (cluster[i] == cj) {
+		cluster[i] = cluster[ci];
 	}
 }
-
-
 
 
 /*---------------------------------------------------------------
@@ -117,12 +105,10 @@ function getDistanceOfData(sampleNum, nextSampleNum, elementCnt, data) {
 
 	var distance = 0;
 	var sum = 0;
-	var tmp = 0;
 
 	// 要素の数だけ繰り返す
 	for (var i= 0; i < elementCnt; i++) {
-		tmp =  data[sampleNum][i] - data[nextSampleNum][i];
-		sum += tmp * tmp;
+		sum += Math.pow(data[sampleNum][i] - data[nextSampleNum][i], 2);
 	}
 	distance = Math.sqrt(sum);
 

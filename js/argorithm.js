@@ -8,7 +8,7 @@
  //	[162, 46],
  //	[174, 54],
  //	[167, 55],
- //	[179, 53],
+ //	[170, 53],
  //	[159, 48],
  //	[165, 50],
  //	[165, 49],
@@ -27,8 +27,12 @@
  	[7, 8]	
  ];
 
+ var method = 1;
+
 var sampleCnt  = samples.length; // サンプル数
 var elementCnt = samples[0].length; // 要素数
+var clusterSampleCnt = []; // あるクラスターに属するサンプル数を格納する
+var cluster = []; // 所属するクラスター番号
 
 data = [];
 
@@ -36,6 +40,8 @@ var sampleCnt = samples.length;
 
 // データ間の距離を計算して配列に格納
 for (var i = 0; i < sampleCnt; i++) {
+	clusterSampleCnt[i] = 1; // i番目のクラスターのサンプル数を初期化する
+	cluster[i] = i; // i番目のクラスターにはi番目のサンプル番号を格納する
 	data[i] = new Array();
 	for (var j = i + 1; j < sampleCnt; j++) {
 		data[i][j] = getDistanceOfData(i, j, elementCnt, samples);
@@ -47,6 +53,7 @@ for (var i = 0; i < sampleCnt; i++) {
 		data[j][i] = data[i][j];
 	}
 }
+
 
 // 最小距離のクラスターを探す
 var min;
@@ -62,8 +69,26 @@ for (var i = 0; i < sampleCnt; i++) {
 	}
 }
 
-// 実行
- console.log(min);
+// クラスターを融合して他のクラスターとの距離を算出する
+for (var i = 0; i < sampleCnt; i++) {
+	for (var j = i + 1; j < sampleCnt; j++) {
+		if (i !=cj && j != cj) {
+			if (i == ci) {
+				data[i][j] = getDistanceOfCluster(method, data[ci][j], data[cj][j], 0, 0, 0, 0);
+				data[j][i] = data[i][j];
+			}
+		}
+	}
+}
+
+// 各クラスターのサンプル数とサンプル番号を更新する
+clusterSampleCnt[ci] += clusterSampleCnt[cj];
+for (var i = 0; i < sampleCnt; i++) {
+	if (cluster[i] == cj) {
+		cluster[i] = cluster[ci];
+	}
+}
+
 
 /*---------------------------------------------------------------
  * 2つのデータ間の距離を取得する関数
